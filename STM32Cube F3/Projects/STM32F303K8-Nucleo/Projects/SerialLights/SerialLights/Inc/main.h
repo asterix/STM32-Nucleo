@@ -28,11 +28,13 @@
 #define _SERIALLEDS_MAIN_H_
 
 
-// Includes
+/* Includes */
 #include "stm32f3xx_hal.h"
 #include "stm32f3xx_nucleo_32.h"
+#include "stdlib.h"
 
-// Typedefs
+
+/* New types */
 typedef struct
 {
 	uint8_t r;
@@ -40,11 +42,29 @@ typedef struct
 	uint8_t b;
 }pixel;
 
-// Prototypes
+/* Prototypes */
 void config_system_clock(void);
+
 void init_all(void);
+
 void strip_set_pixel_color(pixel *leds, int pixel_index, uint8_t r, uint8_t g, uint8_t b);
+
 void strip_display_all(pixel *leds);
 
+int random(int min, int max);
 
-#endif // _SERIALLEDS_MAIN_H_
+void random_color(pixel *pix, int min, int max);
+
+void led_dance(void);
+
+int mode_randomize(int p);
+
+void switch_mode(void);
+
+void randomize_vars(void);
+
+void check_all_bounds(void);
+
+void stay_stationary(int time);
+
+#endif /* _SERIALLEDS_MAIN_H_ */
