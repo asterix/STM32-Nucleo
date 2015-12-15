@@ -287,7 +287,7 @@ void strip_display_all(pixel *leds)
   int i, j;
   uint8_t current_r, current_g, current_b;
   uint16_t high = 0, low = 0;
-  uint32_t current_pixel_grb, mask = 0x80000000;
+  uint32_t current_pixel_grb, mask;
   
   /* Maintain other bits of PORTB */
   high = PIXEL_PORT->ODR | (PIXEL_PIN);
@@ -300,14 +300,18 @@ void strip_display_all(pixel *leds)
     current_r = leds[i].r;
     current_b = leds[i].b;
     
+    /* Pack pixel <G><R><B><0x00> */
     current_pixel_grb  = (current_g << 24);
     current_pixel_grb |= (current_r << 16);
     current_pixel_grb |= (current_b << 8);
     
+    /* Reset mask */
+    mask = 0x80000000;
+    
     /* 24 bits in G-R-B */
     for(j = 0; j < 24; j++)
     {
-      if((mask >> j) & current_pixel_grb)
+      if(mask & current_pixel_grb)
       {
         /* Bit is 1 */
         PIXEL_PORT->ODR = high;
@@ -360,6 +364,10 @@ void strip_display_all(pixel *leds)
           nop; nop;");
         
       }
+      
+      /* Constant shifts per color prevents timing drift */
+      mask = mask >> 1;
+      
     }
   }
   
