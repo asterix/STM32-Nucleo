@@ -257,7 +257,7 @@ void stay_stationary(int time)
 int random(int min, int max)
 {
   int random_num = rand();
-  return (random_num % max + min);
+  return (random_num % (max - min) + min);
 }
 
 /* Generate a random color not nearing black */
